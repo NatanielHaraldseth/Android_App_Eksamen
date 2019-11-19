@@ -24,10 +24,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/tilbake"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spise_sted_søkebar" />
+        app:layout_constraintTop_toBottomOf="@id/spise_sted_søkebar"
+        app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/tilbake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tilbake"
+            android:layout_margin="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/fram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fram"
+            android:layout_margin="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/nå_antall_side"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1/100"
+            android:textStyle="bold"
+            android:layout_margin="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/fram"
+            app:layout_constraintStart_toEndOf="@+id/tilbake"
+    app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
