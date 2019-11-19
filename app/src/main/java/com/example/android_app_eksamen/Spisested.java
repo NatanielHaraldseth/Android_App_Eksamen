@@ -43,7 +43,7 @@ public class Spisested {
 
     public Spisested() {}
 
-    public static ArrayList<Spisested> addToAddressList(String jsonAddress) throws JSONException, NullPointerException{
+    public static ArrayList<Spisested> leggTilSpisestedListe(String jsonAddress) throws JSONException, NullPointerException{
         ArrayList<Spisested> spisestedList = new ArrayList<>();
 
         JSONObject jsonObject = new JSONObject(jsonAddress);
