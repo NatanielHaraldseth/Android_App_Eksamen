@@ -60,6 +60,30 @@ public class Spisested {
 
     }
 
+    public int getOrgnummer() {
+        return orgnummer;
+    }
+
+    public int getPostnr() {
+        return postnr;
+    }
+
+    public int getTotal_karakter() {
+        return total_karakter;
+    }
+
+    public String getNavn() {
+        return navn;
+    }
+
+    public String getAdrlinje1() {
+        return adrlinje1;
+    }
+
+    public String getPoststed() {
+        return poststed;
+    }
+
     @Override
     public String toString() {
         return  orgnummer           + ' ' +

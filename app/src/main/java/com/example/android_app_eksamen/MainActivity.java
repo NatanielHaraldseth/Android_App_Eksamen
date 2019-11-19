@@ -31,9 +31,10 @@ import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity {
 
     //Variabler for RecyclerViewet
-    private LinkedList<String> mOrdListe = new LinkedList<>();
+    ArrayList<Spisested> spisestedArrayList;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     //Variabler for toolbar
     private Toolbar toolbar;
@@ -59,12 +60,27 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         //
+        spisestedArrayList = new ArrayList<>();
         fyllRecyclerView();
-        mAdapter = new RecyclerViewAdapter(this, mOrdListe);
+
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new RecyclerViewAdapter(spisestedArrayList);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //
+        //byggRecyclerView();
 
     }/**SLUTT PÅ OnCreate*/
+
+    private void byggRecyclerView() {
+        fyllRecyclerView();
+        //mAdapter = new RecyclerViewAdapter(this, mOrdListe);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
     private void fyllRecyclerView() {
         String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn";
@@ -76,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
 
                     for (Spisested s: spisestedList) {
-                        mOrdListe.add(s.toString());
+                        spisestedArrayList.add(s);
+                        System.out.println(spisestedArrayList.toString());
+
                     }
                     mAdapter.notifyDataSetChanged();
 
