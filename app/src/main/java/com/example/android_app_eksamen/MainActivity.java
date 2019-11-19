@@ -1,8 +1,15 @@
 package com.example.android_app_eksamen;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -14,7 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter mAdapter;
 
     //Variabler for toolbar
-    Toolbar toolbar;
+    private Toolbar toolbar;
+
+    //Variabler for Volley
+    private RequestQueue requestQueue;
+    private RestAdapter restAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +55,43 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //
-        populerListe();
+        restAdapter = new RestAdapter(this);
+        requestQueue = Volley.newRequestQueue(this);
+
+        //
+        fyllRecyclerView();
         mAdapter = new RecyclerViewAdapter(this, mOrdListe);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }/**SLUTT PÅ OnCreate*/
 
-    private void populerListe() {
-        for (int i = 0; i <= 20; i++) {
-            mOrdListe.add("Numero: " + i);
-        }
+    private void fyllRecyclerView() {
+        String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn";
+
+        StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
+
+                    for (Spisested s: spisestedList) {
+                        mOrdListe.add(s.toString());
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(request);
     }
 
     @Override
