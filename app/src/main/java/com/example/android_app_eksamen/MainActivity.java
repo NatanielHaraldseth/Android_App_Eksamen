@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
                     for (Spisested s: spisestedList) {
                         spisestedArrayList.add(s);
-                        System.out.println(spisestedArrayList.toString());
-
                     }
                     mAdapter.notifyDataSetChanged();
 
