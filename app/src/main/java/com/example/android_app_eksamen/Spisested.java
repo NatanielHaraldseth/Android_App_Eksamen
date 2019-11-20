@@ -4,9 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Spisested {
+public class Spisested implements Serializable {
     //Klasse variabler
     private int orgnummer, postnr, total_karakter;
     private String navn, adrlinje1, poststed;

@@ -65,18 +65,6 @@ public class MainActivity extends AppCompatActivity {
         spisestedArrayList = new ArrayList<>();
 
         //
-        byggRecyclerView(spørringNavn, spørringPostSted);
-
-
-    }/**SLUTT PÅ OnCreate*/
-
-    public void søke_knapp(View view) {
-        spisestedArrayList.clear();
-        spørringNavn = String.valueOf(søkeBar.getText());
-        spørringPostSted = String.valueOf(søkeBar.getText());
-        byggRecyclerView(spørringNavn, spørringPostSted);
-    }
-    private void byggRecyclerView(String spørring, String spørringPostSted) {
         fyllRecyclerView(spørringNavn, spørringPostSted);
 
         mRecyclerView.setHasFixedSize(true);
@@ -87,8 +75,15 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeForÅSlette(mAdapter));
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
-    }
 
+    }/**SLUTT PÅ OnCreate*/
+
+    public void søke_knapp(View view) {
+        spisestedArrayList.clear();
+        spørringNavn = String.valueOf(søkeBar.getText());
+        spørringPostSted = String.valueOf(søkeBar.getText());
+        fyllRecyclerView(spørringNavn, spørringPostSted);
+    }
 
     private void fyllRecyclerView(String spørring, String spørringPostSted) {
         String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
@@ -140,4 +135,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }/**SLUTT PÅ KLASSE MainActivity*/
