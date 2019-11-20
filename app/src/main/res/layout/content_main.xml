@@ -10,24 +10,36 @@
 
     <EditText
         android:id="@+id/spise_sted_søkebar"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="5dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SØK"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="5dp"
+        android:onClick="søke_knapp"
+        android:background="@android:color/holo_red_dark"
+        app:layout_constraintStart_toEndOf="@+id/spise_sted_søkebar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="35dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/tilbake"
+        app:layout_constraintBottom_toTopOf="@+id/nå_antall_side"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spise_sted_søkebar"
         app:layout_constraintVertical_bias="0.0" />
 

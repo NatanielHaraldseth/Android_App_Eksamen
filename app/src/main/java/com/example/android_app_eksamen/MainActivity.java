@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private RestAdapter restAdapter;
 
+    //Variabler for søkebar
+    private EditText søkeBar;
+    private String spørringNavn = "";
+    private String spørringPostSted = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         //
         toolbar         = findViewById(R.id.toolbar);
         mRecyclerView   = findViewById(R.id.recycler_view);
+        søkeBar         = findViewById(R.id.spise_sted_søkebar);
 
         //
         setSupportActionBar(toolbar);
@@ -57,12 +65,19 @@ public class MainActivity extends AppCompatActivity {
         spisestedArrayList = new ArrayList<>();
 
         //
-        byggRecyclerView();
+        byggRecyclerView(spørringNavn, spørringPostSted);
+
 
     }/**SLUTT PÅ OnCreate*/
 
-    private void byggRecyclerView() {
-        fyllRecyclerView();
+    public void søke_knapp(View view) {
+        spisestedArrayList.clear();
+        spørringNavn = String.valueOf(søkeBar.getText());
+        spørringPostSted = String.valueOf(søkeBar.getText());
+        byggRecyclerView(spørringNavn, spørringPostSted);
+    }
+    private void byggRecyclerView(String spørring, String spørringPostSted) {
+        fyllRecyclerView(spørringNavn, spørringPostSted);
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -74,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void fyllRecyclerView() {
-        String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn";
+
+    private void fyllRecyclerView(String spørring, String spørringPostSted) {
+        String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
 
         StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -99,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        requestQueue.add(request);
+        MySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     @Override
@@ -124,5 +140,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }/**SLUTT PÅ KLASSE MainActivity*/
