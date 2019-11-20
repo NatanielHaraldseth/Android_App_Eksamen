@@ -1,8 +1,15 @@
 package com.example.android_app_eksamen;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,23 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
         //
         spisestedArrayList = new ArrayList<>();
+
+        //
+        byggRecyclerView();
+
+    }/**SLUTT PÅ OnCreate*/
+
+    private void byggRecyclerView() {
         fyllRecyclerView();
 
         mRecyclerView.setHasFixedSize(true);
@@ -68,18 +69,9 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RecyclerViewAdapter(spisestedArrayList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeForÅSlette(mAdapter));
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
-
-        //
-        //byggRecyclerView();
-
-    }/**SLUTT PÅ OnCreate*/
-
-    private void byggRecyclerView() {
-        fyllRecyclerView();
-        //mAdapter = new RecyclerViewAdapter(this, mOrdListe);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void fyllRecyclerView() {

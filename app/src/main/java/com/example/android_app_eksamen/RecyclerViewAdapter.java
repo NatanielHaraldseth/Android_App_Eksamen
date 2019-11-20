@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,11 +18,11 @@ import java.util.LinkedList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.WordViewHolder> {
 
     private ArrayList<Spisested> spisestedArrayList;
+    private Object mRecentlyDeletedItem;
+    private int mRecentlyDeletedItemPosition;
+    private AppCompatActivity mActivity;
 
     public class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        //
-        public final TextView wordItemView;
 
         //
         public TextView textView1, textView2, textView3, textView4, textView5, textView6;
@@ -34,7 +37,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textView5 = itemView.findViewById(R.id.textView5);
             textView6 = itemView.findViewById(R.id.textView6);
             //
-            wordItemView = itemView.findViewById(R.id.ord);
             itemView.setOnClickListener(this);
         }
 
@@ -73,6 +75,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return spisestedArrayList.size();
+    }
+
+    public void deleteItem(int posisjon) {
+        mRecentlyDeletedItem = spisestedArrayList.get(posisjon);
+        mRecentlyDeletedItemPosition = posisjon;
+        spisestedArrayList.remove(posisjon);
+        notifyItemRemoved(posisjon);
+        //showUndoSnackbar();
+    }
+
+    private void undoDelete() {
+        spisestedArrayList.add(mRecentlyDeletedItemPosition, (Spisested) mRecentlyDeletedItem);
+        notifyItemInserted(mRecentlyDeletedItemPosition);
     }
 
 }/**SLUTT PÅ RecyclerViewAdapter KLASSE*/
