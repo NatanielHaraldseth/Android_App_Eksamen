@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Spisested implements Serializable {
     //Klasse variabler
     private int orgnummer, postnr, total_karakter;
-    private String navn, adrlinje1, poststed;
+    private String navn, adrlinje1, poststed, tilsynid;
 
     //Json spesifikke variabler
     private static final String KOL_NAVN            = "navn";
@@ -19,17 +19,19 @@ public class Spisested implements Serializable {
     private static final String KOL_ORG_NUMMER      = "orgnummer";
     private static final String KOL_POST_NR         = "postnr";
     private static final String KOL_TOTAL_KARAKTER  = "total_karakter";
+    private static final String KOL_TILSYN_ID       = "tilsynid";
 
     //Json tabell
     private static final String TABLE_NAME          = "entries";
 
-    public Spisested(int orgnummer, int postnr, int total_karakter, String navn, String adrlinje1, String poststed) {
+    public Spisested(int orgnummer, int postnr, int total_karakter, String navn, String adrlinje1, String poststed, String tilsynid) {
         this.orgnummer          = orgnummer;
         this.postnr             = postnr;
         this.total_karakter     = total_karakter;
         this.navn               = navn;
         this.adrlinje1          = adrlinje1;
         this.poststed           = poststed;
+        this.tilsynid           = tilsynid;
     }
 
     //jsonST = jsonSpiseSted.
@@ -40,6 +42,7 @@ public class Spisested implements Serializable {
         this.navn               = jsonST.optString(KOL_NAVN);
         this.adrlinje1          = jsonST.optString(KOL_ADR_LINJE);
         this.poststed           = jsonST.optString(KOL_POST_STED);
+        this.tilsynid           = jsonST.optString(KOL_TILSYN_ID);
     }
 
     public Spisested() {}
@@ -85,13 +88,18 @@ public class Spisested implements Serializable {
         return poststed;
     }
 
+    public String getTilsynid() {
+        return tilsynid;
+    }
+
     @Override
     public String toString() {
-        return  orgnummer           + ' ' +
-                  postnr            + ' ' +
-                  total_karakter    + ' ' +
-                  navn              + ' ' +
-                  adrlinje1         + ' ' +
-                  poststed;
+        return  orgnummer         + ' ' +
+                postnr            + ' ' +
+                total_karakter    + ' ' +
+                navn              + ' ' +
+                adrlinje1         + ' ' +
+                poststed          + ' ' +
+                tilsynid;
     }
 }

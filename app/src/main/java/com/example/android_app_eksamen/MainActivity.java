@@ -2,6 +2,7 @@ package com.example.android_app_eksamen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnNoteListener {
 
     //Variabler for RecyclerViewet
     ArrayList<Spisested> spisestedArrayList;
@@ -43,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText søkeBar;
     private String spørringNavn = "";
     private String spørringPostSted = "";
+
+    //Variabler for aktivitets "transport"
+    public final String MIN_ID = "android_app_eksamen";
+
+    //Logging
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new RecyclerViewAdapter(spisestedArrayList);
+        mAdapter = new RecyclerViewAdapter(spisestedArrayList, this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeForÅSlette(mAdapter));
@@ -136,4 +143,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onNoteClick(int posisjon) {
+        Intent intent = new Intent(this, ListViewActivity.class);
+        String tilsynID = spisestedArrayList.get(posisjon).getTilsynid();
+        Log.d(TAG, "onNoteClick: " + tilsynID);
+        intent.putExtra(MIN_ID, tilsynID);
+        startActivity(intent);
+    }
 }/**SLUTT PÅ KLASSE MainActivity*/

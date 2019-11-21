@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SwipeForÅSlette extends ItemTouchHelper.SimpleCallback {
 
     private RecyclerViewAdapter recyclerViewAdapter;
-    boolean test = false;
-
 
     public SwipeForÅSlette(RecyclerViewAdapter recyclerViewAdapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
