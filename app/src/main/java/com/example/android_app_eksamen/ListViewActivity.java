@@ -20,10 +20,8 @@ public class ListViewActivity extends AppCompatActivity {
 
     //ListView variabler
     private ListView list;
-    private ArrayList<String> arrayList;
     private ArrayList<Kravpunkt> kravpunktArrayList;
     private ArrayList<Spisested> spisestedArrayList;
-    private ArrayAdapter<Kravpunkt> arrayAdapter;
     private ListViewAdapter listViewAdapter;
 
     //Logging
@@ -44,7 +42,6 @@ public class ListViewActivity extends AppCompatActivity {
         fyllListViewKravpunkt(tilsynId);
         //
         listViewAdapter = new ListViewAdapter(this, R.layout.listview_item_layout, kravpunktArrayList);
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, kravpunktArrayList);
         list.setAdapter(listViewAdapter);
     }
 
