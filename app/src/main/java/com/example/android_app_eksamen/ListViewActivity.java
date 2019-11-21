@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +22,6 @@ public class ListViewActivity extends AppCompatActivity {
     //ListView variabler
     private ListView list;
     private ArrayList<Kravpunkt> kravpunktArrayList;
-    private ArrayList<Spisested> spisestedArrayList;
     private ListViewAdapter listViewAdapter;
 
     //Logging
@@ -34,42 +34,25 @@ public class ListViewActivity extends AppCompatActivity {
         //
         list = findViewById(R.id.list);
         //
+        TextView navnTV     = findViewById(R.id.textViewNavn);
+        TextView adresseTV  = findViewById(R.id.textViewAdresse);
+        TextView poststedTV = findViewById(R.id.textViewPoststed);
+        //
         Intent intent = getIntent();
-        String tilsynId = intent.getStringExtra(MainActivity.MIN_ID);
+        Spisested spisested = (Spisested) intent.getSerializableExtra(MainActivity.MIN_ID);
+        String tilsynId = spisested.getTilsynid();
         Log.d(TAG, "onCreate: " + tilsynId);
         //
+        navnTV.setText(spisested.getNavn());
+        adresseTV.setText(spisested.getAdrlinje1());
+        poststedTV.setText(spisested.getPoststed());
+        //
         kravpunktArrayList = new ArrayList<>();
+        //
         fyllListViewKravpunkt(tilsynId);
         //
         listViewAdapter = new ListViewAdapter(this, R.layout.listview_item_layout, kravpunktArrayList);
         list.setAdapter(listViewAdapter);
-    }
-
-    private void fyllListViewSpisested(String tilsynId) {
-        String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?tilsynid=" + tilsynId;
-
-        StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
-
-                    for (Spisested s: spisestedList) {
-                        spisestedArrayList.add(s);
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-
-        MySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     private void fyllListViewKravpunkt(String tilsynId) {

@@ -146,9 +146,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onNoteClick(int posisjon) {
         Intent intent = new Intent(this, ListViewActivity.class);
-        String tilsynID = spisestedArrayList.get(posisjon).getTilsynid();
-        Log.d(TAG, "onNoteClick: " + tilsynID);
-        intent.putExtra(MIN_ID, tilsynID);
+        Spisested spisested = new Spisested(spisestedArrayList.get(posisjon).getOrgnummer(),
+                                            spisestedArrayList.get(posisjon).getPostnr(),
+                                            spisestedArrayList.get(posisjon).getTotal_karakter(),
+                                            spisestedArrayList.get(posisjon).getNavn(),
+                                            spisestedArrayList.get(posisjon).getAdrlinje1(),
+                                            spisestedArrayList.get(posisjon).getPoststed(),
+                                            spisestedArrayList.get(posisjon).getTilsynid());
+        intent.putExtra(MIN_ID, spisested);
         startActivity(intent);
     }
 }/**SLUTT PÅ KLASSE MainActivity*/
