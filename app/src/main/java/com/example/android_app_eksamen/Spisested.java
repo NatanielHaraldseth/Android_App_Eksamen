@@ -47,10 +47,10 @@ public class Spisested implements Serializable {
 
     public Spisested() {}
 
-    public static ArrayList<Spisested> leggTilSpisestedListe(String jsonAddress) throws JSONException, NullPointerException{
+    public static ArrayList<Spisested> leggTilSpisestedListe(String jsonSpisested) throws JSONException, NullPointerException{
         ArrayList<Spisested> spisestedList = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(jsonAddress);
+        JSONObject jsonObject = new JSONObject(jsonSpisested);
 
         JSONArray spisestedTabell = jsonObject.optJSONArray(TABLE_NAME);
 
