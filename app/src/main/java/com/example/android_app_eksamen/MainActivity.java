@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private String spørringPostSted = "";
 
     //Variabler for aktivitets "transport"
-    public final String MIN_ID = "android_app_eksamen";
+    public final static String MIN_ID = "android_app_eksamen";
 
     //Logging
     private static final String TAG = "MainActivity";
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         fyllRecyclerView(spørringNavn, spørringPostSted);
     }
 
-    private void fyllRecyclerView(String spørring, String spørringPostSted) {
+    private void fyllRecyclerView(String spørringNavn, String spørringPostSted) {
         String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
 
         StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

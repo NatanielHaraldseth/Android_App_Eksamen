@@ -90,12 +90,11 @@ public class Kravpunkt implements Serializable {
 
     @Override
     public String toString() {
-        return  karakter            + ' ' +
-                ordningsverdi       + ' ' +
-                dato                + ' ' +
-                tilsynid            + ' ' +
-                tekst_no            + ' ' +
-                kravpunktnavn_no    + ' ' +
-                date;
+        return  karakter            + " " +
+                ordningsverdi       + " " +
+                dato                + " " +
+                tilsynid            + " " +
+                tekst_no            + " " +
+                kravpunktnavn_no;
     }
 }/**SLUTT PÅ Kravpunkt KLASSEN*/
