@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     //Variabler for søkebar
     private EditText søkeBar;
-    private String spørringNavn = "";
-    private String spørringPostSted = "";
+    private String spørring = "";
 
     //Variabler for aktivitets "transport"
     public final static String MIN_ID = "android_app_eksamen";
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         dbAksess.close();
 
         //
-        fyllRecyclerView(spørringNavn, spørringPostSted, tilstand, arstall);
+        fyllRecyclerView(spørring, tilstand, arstall);
 
         //
         mRecyclerView.setHasFixedSize(true);
@@ -100,13 +99,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     public void søke_knapp(View view) {
         spisestedArrayList.clear();
-        spørringNavn = String.valueOf(søkeBar.getText());
-        spørringPostSted = String.valueOf(søkeBar.getText());
-        fyllRecyclerView(spørringNavn, spørringPostSted, false, "");
+        spørring = String.valueOf(søkeBar.getText());
+        fyllRecyclerView(spørring, false, "");
     }
 
-    private void fyllRecyclerView(String spørringNavn, String spørringPostSted, boolean tilstand, String arstall) {
-        String url          = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
+    private void fyllRecyclerView(String spørring, boolean tilstand, String arstall) {
+        String url          = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?query=" + spørring;
         String urlOnCreate  = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?sakref=" + arstall;
 
         if (tilstand && !arstall.equals("Alle")) {
