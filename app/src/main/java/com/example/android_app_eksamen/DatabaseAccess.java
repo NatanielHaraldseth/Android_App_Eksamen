@@ -56,14 +56,18 @@ public class DatabaseAccess {
         minDb.insert(DatabaseHjelper.TABLE_NAME, null, initialValues);
     }
 
+    public void settInnBryterTilstand(String tilstand) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(DatabaseHjelper.COL_TOGGLE_STATE, tilstand);
+        minDb.insert(DatabaseHjelper.TABLE_NAME, null, initialValues);
+    }
+
     public String getArstall() {
         Cursor c = minDb.rawQuery("SELECT årstall FROM favoritt_sted ", null);
         String arstall = "";
         if (c.moveToFirst()){
             do {
-                // Passing values
                 arstall = c.getString(c.getColumnIndex("årstall"));
-                // Do something Here with values
                 Log.d(TAG, "selectData: " + arstall);
             } while(c.moveToNext());
         }

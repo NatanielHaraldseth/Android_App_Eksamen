@@ -65,7 +65,7 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
 
     public int getArstallIndex(String arstall, String[] arstallArray) {
 
-        for (int i = 0; i <= arstallArray.length; i++) {
+        for (int i = 0; i < arstallArray.length; i++) {
             String arstallSammenligner = arstallArray[i];
             if (arstallSammenligner.equals(arstall)) return i;
         }
@@ -81,6 +81,9 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
             aksess.close();
             Log.d(TAG, "onCheckedChanged: " + arstall);
         }
+        aksess.open();
+        aksess.settInnBryterTilstand(String.valueOf(isChecked));
+        aksess.close();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("switchkey", isChecked);
