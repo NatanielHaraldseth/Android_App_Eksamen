@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Navn"
         android:layout_margin="5dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Adresse"
         android:layout_margin="5dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/textViewNavn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/textViewPoststed"/>
@@ -31,6 +33,7 @@
         android:layout_height="wrap_content"
         android:text="Poststed"
         android:layout_margin="5dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/textViewNavn"
         app:layout_constraintStart_toEndOf="@+id/textViewAdresse"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -5,51 +5,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/textListView1"
+        android:id="@+id/list_view_dato"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:text="dato"
         android:layout_margin="5dp"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/textListView2"
+        android:id="@+id/list_view_total_karakter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="T-Karakter"
         android:layout_margin="5dp"
-        android:text="Test"
-        app:layout_constraintTop_toBottomOf="@+id/textListView1"/>
+        app:layout_constraintTop_toBottomOf="@+id/list_view_kravpunkt_navn"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/textListView3"
+        android:id="@+id/list_view_tekst_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:text="tekst"
         android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/textListView2"/>
+        app:layout_constraintTop_toBottomOf="@+id/list_view_dato"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/textListView4"
+        android:id="@+id/list_view_ordnings_verdi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:text="O-Verdi"
         android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/textListView3"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_tekst_no"/>
 
     <TextView
-        android:id="@+id/textListView5"
+        android:id="@+id/list_view_kravpunkt_navn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:text="kravpunkt"
         android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/textListView4"/>
-
-    <TextView
-        android:id="@+id/textListView6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Test"
-        android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/textListView5"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_ordnings_verdi"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
