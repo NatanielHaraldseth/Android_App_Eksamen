@@ -1,15 +1,30 @@
 package com.example.android_app_eksamen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class SettingActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
 
-    private DatabaseHjelper mDb;
+public class SettingActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+
+    private static final String PREFS_NAME = "key_enable_arstall";
+    private TextView favoritt_sted_input_postnr, favoritt_sted_input_poststed;
+    private Spinner arstall_spinner;
+    private Switch bryter;
+
+    private ArrayAdapter<String> adapter;
+
+    private String arstall;
+
+    private DatabaseAccess aksess;
 
     private static final String TAG = "SettingActivity";
 
@@ -17,20 +32,76 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-
-        DatabaseAccess aksess = new DatabaseAccess(this);
+        //
+        arstall_spinner                 = findViewById(R.id.årstall_spinner);
+        bryter                          = findViewById(R.id.switch_årstall_lagring);
+        favoritt_sted_input_postnr      = findViewById(R.id.favoritt_sted_input_postnr);
+        favoritt_sted_input_poststed    = findViewById(R.id.favoritt_sted_input_poststed);
+        //
+        aksess = new DatabaseAccess(this);
+        //
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean silent = settings.getBoolean("switchkey", false);
+        bryter.setChecked(silent);
+        //
         aksess.open();
-        Log.d(TAG, "onCreate: " + "REEEEEEEEEEEEEEEE");
+        arstall = aksess.getArstall();
         aksess.close();
+        //
+        String[] arstallArray = new String[]{"2015", "2016", "2017", "2018", "2019", "Alle"};
+        //
+        int arstallIndex = getArstallIndex(arstall, arstallArray);
+        Log.d(TAG, "onCreate: " + getArstallIndex(arstall, arstallArray));
+        //
+        arstall_spinner.setSelection(arstallIndex);
+        if (bryter != null) {
+            bryter.setOnCheckedChangeListener(this);
+        }
+        //
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arstallArray);
+        //
+        arstall_spinner.setAdapter(adapter);
+    }
 
-        //get the spinner from the xml.
-        Spinner dropdown = findViewById(R.id.årstall_spinner);
-        //create a list of items for the spinner.
-        String[] items = new String[]{"2015", "2016", "2017", "2018", "2019"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+    public int getArstallIndex(String arstall, String[] arstallArray) {
+
+        for (int i = 0; i <= arstallArray.length; i++) {
+            String arstallSammenligner = arstallArray[i];
+            if (arstallSammenligner.equals(arstall)) return i;
+        }
+        return 0;
+    }
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
+        if(isChecked) {
+            String arstall = arstall_spinner.getSelectedItem().toString();
+            aksess.open();
+            aksess.settInnArstall(arstall);
+            aksess.close();
+            Log.d(TAG, "onCheckedChanged: " + arstall);
+        }
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("switchkey", isChecked);
+        editor.apply();
+    }
+
+    public void favorittsted_lagring_poststed(View view) {
+        String poststed = String.valueOf(favoritt_sted_input_poststed.getText());
+        aksess.open();
+        aksess.settInnPoststed(poststed);
+        favoritt_sted_input_poststed.setText("");
+        aksess.close();
+        Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
+    }
+
+    public void favorittsted_lagring_postnr(View view) {
+        String postnr = String.valueOf(favoritt_sted_input_postnr.getText());
+        aksess.open();
+        aksess.settInnPostnr(postnr);
+        favoritt_sted_input_postnr.setText("");
+        aksess.close();
+        Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
     }
 }

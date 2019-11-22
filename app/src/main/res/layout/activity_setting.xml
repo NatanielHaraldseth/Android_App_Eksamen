@@ -20,13 +20,13 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/favoritt_sted"
+        android:id="@+id/favoritt_sted_poststed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="Favorittsted"
+        android:text="Lagre Favorittsted på poststed"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textAlignment="center"
@@ -35,24 +35,63 @@
         app:layout_constraintTop_toBottomOf="@id/innstillinger" />
 
     <EditText
-        android:id="@+id/favoritt_sted_input"
+        android:id="@+id/favoritt_sted_input_poststed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/favoritt_sted" />
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_poststed" />
 
     <Button
-        android:id="@+id/favoritt_sted_knapp"
+        android:id="@+id/favoritt_sted_knapp_poststed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:text="Lagre"
         android:textStyle="bold"
+        android:onClick="favorittsted_lagring_poststed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input" />
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input_poststed" />
+<!-- ******************************************************************************************* -->
+
+    <TextView
+        android:id="@+id/favoritt_sted_postnr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Lagre Favorittsted på postNr"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_knapp_poststed" />
+
+    <EditText
+        android:id="@+id/favoritt_sted_input_postnr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_postnr" />
+
+    <Button
+        android:id="@+id/favoritt_sted_knapp_postnr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="Lagre"
+        android:textStyle="bold"
+        android:onClick="favorittsted_lagring_postnr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input_postnr" />
+<!-- ******************************************************************************************* -->
 
     <TextView
         android:id="@+id/årstall_tittel"
@@ -65,15 +104,13 @@
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input" />
+        app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input_postnr" />
 
     <Switch
-        android:id="@+id/Switch_årstall_lagring"
+        android:id="@+id/switch_årstall_lagring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        tools:layout_editor_absoluteX="112dp"
-        tools:layout_editor_absoluteY="84dp"
         app:layout_constraintStart_toEndOf="@+id/årstall_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/årstall_tittel"
@@ -85,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/Switch_årstall_lagring"
+        app:layout_constraintEnd_toStartOf="@id/switch_årstall_lagring"
         app:layout_constraintTop_toBottomOf="@id/årstall_tittel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
