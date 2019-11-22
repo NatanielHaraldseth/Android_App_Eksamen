@@ -44,6 +44,7 @@
         app:layout_constraintTop_toBottomOf="@id/favoritt_sted" />
 
     <Button
+        android:id="@+id/favoritt_sted_knapp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -66,13 +67,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoritt_sted_input" />
 
+    <Switch
+        android:id="@+id/Switch_årstall_lagring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="84dp"
+        app:layout_constraintStart_toEndOf="@+id/årstall_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/årstall_tittel"
+        />
+
     <Spinner
         android:id="@+id/årstall_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/Switch_årstall_lagring"
         app:layout_constraintTop_toBottomOf="@id/årstall_tittel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
