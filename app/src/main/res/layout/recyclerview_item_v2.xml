@@ -5,74 +5,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="4dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="4dp" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/text_view_navn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="line1"
+            android:text="navn"
+            android:layout_margin="8dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/text_view_post_sted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Line2"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/textView1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Line3"
+            android:layout_below="@+id/text_view_navn"
+            android:layout_margin="8dp"
+            android:text="poststed"
             android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_navn"/>
+
+        <TextView
+            android:id="@+id/text_view_total_karakter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="T-Karakter"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
              />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/text_view_adresse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView2"
+            android:layout_below="@+id/text_view_post_sted"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Line2"
-            android:textSize="15sp"/>
+            android:text="adresse"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_post_sted"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/text_view_post_nr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView1"
-            android:layout_toRightOf="@+id/textView2"
+            android:layout_below="@+id/text_view_navn"
+            android:layout_toRightOf="@+id/text_view_post_sted"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Line2"
+            android:text="postnr"
             android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_adresse"
+            app:layout_constraintStart_toStartOf="parent"
             />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/text_view_org_nr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/textView3"
+            android:layout_toRightOf="@id/text_view_total_karakter"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Line2"
-            android:textSize="15sp"/>
+            android:text="org-nr"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_post_nr"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

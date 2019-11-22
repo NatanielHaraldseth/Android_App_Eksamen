@@ -21,18 +21,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private static final String TAG = "WordViewHolder";
 
         //
-        private TextView textView1, textView2, textView3, textView4, textView5, textView6;
+        private TextView text_view_navn, text_view_post_sted, text_view_total_karakter, text_view_adresse, text_view_post_nr, text_view_org_nr;
         private OnNoteListener onNoteListener;
 
         public WordViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             //
-            textView1 = itemView.findViewById(R.id.textView1);
-            textView2 = itemView.findViewById(R.id.textView2);
-            textView3 = itemView.findViewById(R.id.textView3);
-            textView4 = itemView.findViewById(R.id.textView4);
-            textView5 = itemView.findViewById(R.id.textView5);
-            textView6 = itemView.findViewById(R.id.textView6);
+            text_view_navn              = itemView.findViewById(R.id.text_view_navn);
+            text_view_post_sted         = itemView.findViewById(R.id.text_view_post_sted);
+            text_view_total_karakter    = itemView.findViewById(R.id.text_view_total_karakter);
+            text_view_adresse           = itemView.findViewById(R.id.text_view_adresse);
+            text_view_post_nr           = itemView.findViewById(R.id.text_view_post_nr);
+            text_view_org_nr            = itemView.findViewById(R.id.text_view_org_nr);
             //
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
@@ -64,12 +64,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.WordViewHolder holder, int position) {
         Spisested spisested = spisestedArrayList.get(position);
-        holder.textView1.setText(spisested.getNavn());
-        holder.textView2.setText(spisested.getAdrlinje1());
-        holder.textView3.setText(spisested.getPoststed());
-        holder.textView4.setText(String.valueOf(spisested.getOrgnummer()));
-        holder.textView5.setText(String.valueOf(spisested.getPostnr()));
-        holder.textView6.setText(String.valueOf(spisested.getTotal_karakter()));
+        //
+        holder.text_view_navn.setText(spisested.getNavn());
+        holder.text_view_adresse.setText(spisested.getAdrlinje1());
+        holder.text_view_post_sted.setText(spisested.getPoststed());
+        holder.text_view_post_nr.setText(String.valueOf(spisested.getPostnr()));
+        holder.text_view_org_nr.setText(String.valueOf(spisested.getOrgnummer()));
+        holder.text_view_total_karakter.setText(String.valueOf(spisested.getTotal_karakter()));
     }
 
     @Override
