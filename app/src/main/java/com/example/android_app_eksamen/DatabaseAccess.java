@@ -51,9 +51,11 @@ public class DatabaseAccess {
     }
 
     public void settInnArstall(String arstall) {
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(DatabaseHjelper.COL_ARSTALL, arstall);
-        minDb.insert(DatabaseHjelper.TABLE_NAME, null, initialValues);
+        if (!arstall.isEmpty()) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(DatabaseHjelper.COL_ARSTALL, arstall);
+            minDb.insert(DatabaseHjelper.TABLE_NAME, null, initialValues);
+        }
     }
 
     public void settInnBryterTilstand(String tilstand) {
@@ -63,15 +65,28 @@ public class DatabaseAccess {
     }
 
     public String getArstall() {
-        Cursor c = minDb.rawQuery("SELECT årstall FROM favoritt_sted ", null);
+        Cursor c = minDb.rawQuery("SELECT årstall FROM favoritt_sted WHERE årstall IS NOT NULL", null);
         String arstall = "";
         if (c.moveToFirst()){
             do {
                 arstall = c.getString(c.getColumnIndex("årstall"));
-                Log.d(TAG, "selectData: " + arstall);
+                Log.d(TAG, "getArstall: " + arstall);
             } while(c.moveToNext());
         }
         c.close();
         return arstall;
+    }
+
+    public String getBryterTilstand() {
+        Cursor c = minDb.rawQuery("SELECT toggle_state FROM favoritt_sted ", null);
+        String tilstand = "";
+        if (c.moveToFirst()){
+            do {
+                tilstand = c.getString(c.getColumnIndex("toggle_state"));
+                Log.d(TAG, "getBryterTilstand: " + tilstand);
+            } while(c.moveToNext());
+        }
+        c.close();
+        return tilstand;
     }
 }

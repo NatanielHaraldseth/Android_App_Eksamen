@@ -51,10 +51,9 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
         String[] arstallArray = new String[]{"2015", "2016", "2017", "2018", "2019", "Alle"};
         //
         int arstallIndex = getArstallIndex(arstall, arstallArray);
-        Log.d(TAG, "onCreate: " + getArstallIndex(arstall, arstallArray));
         //
-        arstall_spinner.setSelection(arstallIndex);
         if (bryter != null) {
+            arstall_spinner.setSelection(arstallIndex);
             bryter.setOnCheckedChangeListener(this);
         }
         //
@@ -73,15 +72,17 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        aksess.open();
         Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
         if(isChecked) {
-            String arstall = arstall_spinner.getSelectedItem().toString();
-            aksess.open();
-            aksess.settInnArstall(arstall);
-            aksess.close();
-            Log.d(TAG, "onCheckedChanged: " + arstall);
+            String lokalArstall = arstall_spinner.getSelectedItem().toString();
+            if (!lokalArstall.isEmpty()) {
+                aksess.settInnArstall(lokalArstall);
+                Log.d(TAG, "onCheckedChanged: " + lokalArstall);
+
+            }
         }
-        aksess.open();
+
         aksess.settInnBryterTilstand(String.valueOf(isChecked));
         aksess.close();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);

@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     //Logging
     private static final String TAG = "MainActivity";
 
+    //Database aksess
+    private DatabaseAccess dbAksess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +75,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         spisestedArrayList = new ArrayList<>();
 
         //
-        fyllRecyclerView(spørringNavn, spørringPostSted);
+        dbAksess = new DatabaseAccess(this);
+        dbAksess.open();
+        boolean tilstand = Boolean.parseBoolean(dbAksess.getBryterTilstand());
+        String arstall = dbAksess.getArstall();
+        Log.d(TAG, "onCreate: " + tilstand + " " + arstall);
+        dbAksess.close();
 
+        //
+        fyllRecyclerView(spørringNavn, spørringPostSted, tilstand, arstall);
+
+        //
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new RecyclerViewAdapter(spisestedArrayList, this);
 
+        //
         mRecyclerView.setLayoutManager(mLayoutManager);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeForÅSlette(mAdapter));
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -89,35 +102,63 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         spisestedArrayList.clear();
         spørringNavn = String.valueOf(søkeBar.getText());
         spørringPostSted = String.valueOf(søkeBar.getText());
-        fyllRecyclerView(spørringNavn, spørringPostSted);
+        fyllRecyclerView(spørringNavn, spørringPostSted, false, "");
     }
 
-    private void fyllRecyclerView(String spørringNavn, String spørringPostSted) {
-        String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
+    private void fyllRecyclerView(String spørringNavn, String spørringPostSted, boolean tilstand, String arstall) {
+        String url          = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?navn=" + spørringNavn + "&poststed=" + spørringPostSted;
+        String urlOnCreate  = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?sakref=" + arstall;
 
-        StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
+        if (tilstand && !arstall.equals("Alle")) {
+            StringRequest requestArstall =  new StringRequest(Request.Method.GET, urlOnCreate, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
 
-                    for (Spisested s: spisestedList) {
-                        spisestedArrayList.add(s);
+                        for (Spisested s: spisestedList) {
+                            spisestedArrayList.add(s);
+                        }
+                        mAdapter.notifyDataSetChanged();
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    mAdapter.notifyDataSetChanged();
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
 
-        MySingleton.getInstance(this).addToRequestQueue(request);
+            MySingleton.getInstance(this).addToRequestQueue(requestArstall);
+
+        }else {
+            StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
+
+                        for (Spisested s: spisestedList) {
+                            spisestedArrayList.add(s);
+                        }
+                        mAdapter.notifyDataSetChanged();
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+            MySingleton.getInstance(this).addToRequestQueue(request);
+        }
     }
 
     @Override
