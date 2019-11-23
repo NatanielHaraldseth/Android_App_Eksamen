@@ -1,15 +1,23 @@
 package com.example.android_app_eksamen;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     //Variabler for RecyclerViewet
     ArrayList<Spisested> spisestedArrayList;
+    ArrayList<KartverkData> kartverkDataArrayList;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -53,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     //Database aksess
     private DatabaseAccess dbAksess;
 
+    //GPS lokasjon
+    private final static int MY_REQUEST_LOCATION = 1;
+    private final static int radius = 300;
+    private double lat;
+    private double lon;
+    private LocationManager locationManager;
+    private String locationProvider = LocationManager.GPS_PROVIDER;
+    private Location myLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,11 +85,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setSupportActionBar(toolbar);
 
         //
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        //
+        gpsDetaljer();
+
+        //
         restAdapter = new RestAdapter(this);
         requestQueue = Volley.newRequestQueue(this);
 
         //
         spisestedArrayList = new ArrayList<>();
+        kartverkDataArrayList = new ArrayList<>();
 
         //
         dbAksess = new DatabaseAccess(this);
@@ -82,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         dbAksess.close();
 
         //
-        fyllRecyclerView(spørring, tilstand, arstall);
+        postnrFraKartData(radius, 60.39299, 5.32415);
+        fyllRecyclerView(spørring, tilstand, arstall, "");
 
         //
         mRecyclerView.setHasFixedSize(true);
@@ -100,14 +126,40 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void søke_knapp(View view) {
         spisestedArrayList.clear();
         spørring = String.valueOf(søkeBar.getText());
-        fyllRecyclerView(spørring, false, "");
+        fyllRecyclerView(spørring, false, "", "");
     }
 
-    private void fyllRecyclerView(String spørring, boolean tilstand, String arstall) {
+    private void fyllRecyclerView(String spørring, boolean tilstand, String arstall, String postnr) {
         String url          = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?query=" + spørring;
         String urlOnCreate  = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?sakref=" + arstall;
+        String urlPostnr    = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?query=" + postnr;
 
-        if (tilstand && !arstall.equals("Alle")) {
+        if (postnr != null && !postnr.equals("")) {
+            StringRequest requestArstall =  new StringRequest(Request.Method.GET, urlPostnr, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        ArrayList<Spisested> spisestedList = Spisested.leggTilSpisestedListe(response);
+
+                        for (Spisested s: spisestedList) {
+                            spisestedArrayList.add(s);
+                        }
+                        mAdapter.notifyDataSetChanged();
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+            MySingleton.getInstance(this).addToRequestQueue(requestArstall);
+            Log.d(TAG, "fyllRecyclerView: " + "POSTNR IF");
+        }else if (tilstand && !arstall.equals("Alle")) {
             StringRequest requestArstall =  new StringRequest(Request.Method.GET, urlOnCreate, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -131,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             });
 
             MySingleton.getInstance(this).addToRequestQueue(requestArstall);
-
+            Log.d(TAG, "fyllRecyclerView: " + "TILSTAND IF");
         }else {
             StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
@@ -156,7 +208,37 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             });
 
             MySingleton.getInstance(this).addToRequestQueue(request);
+            Log.d(TAG, "fyllRecyclerView: " + "ELSE");
         }
+    }
+
+    private int postnrFraKartData(int radius, double lat, double lon) {
+
+        String kartDataUrl = "https://ws.geonorge.no/adresser/v1/punktsok?radius=" + radius + "&lat=" + lat +"&lon=" + lon;
+
+        StringRequest request=  new StringRequest(Request.Method.GET, kartDataUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    ArrayList<KartverkData> kartverkList = KartverkData.getKartPostnr(response);
+
+                    for (KartverkData s: kartverkList) {
+                        kartverkDataArrayList.add(s);
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        MySingleton.getInstance(this).addToRequestQueue(request);
+
+        return 0;
     }
 
     @Override
@@ -177,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             Intent startIntent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(startIntent);
             return true;
+        }else if (id == R.id.action_location) {
+            spisestedArrayList.clear();
+            String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
+            fyllRecyclerView("", false, "", postnr);
         }
 
         return super.onOptionsItemSelected(item);
@@ -195,4 +281,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         intent.putExtra(MIN_ID, spisested);
         startActivity(intent);
     }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == MY_REQUEST_LOCATION) {
+            //hvis bruker avviser tillatelsen vil arrayet være tomt
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //tillatelse er gitt, ok og starte bruk av gps
+            }else {
+                //tillatelse ikke gitt, drep all funksjon som krever tillatelse
+            }
+        }
+    }
+
+    public void gpsDetaljer() {
+        if (!locationManager.isProviderEnabled(locationProvider)) {
+            Toast.makeText(this, "Aktiver " + locationProvider + " under Location i settings", Toast.LENGTH_SHORT).show();
+        }else {
+            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_LOCATION );
+            }else {
+                //Appen har allerede fått tillatelse
+                myLocation = locationManager.getLastKnownLocation(locationProvider);
+                lat = myLocation.getLatitude();
+                lon = myLocation.getLongitude();
+                Log.d(TAG, "onCreate: " + lat + "  " + lon);
+            }
+        }
+    }
+
 }/**SLUTT PÅ KLASSE MainActivity*/
