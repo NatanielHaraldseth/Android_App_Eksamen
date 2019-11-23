@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     //Variabler for Volley
     private RequestQueue requestQueue;
-    private RestAdapter restAdapter;
 
     //Variabler for søkebar
     private EditText søkeBar;
@@ -55,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     //Variabler for aktivitets "transport"
     public final static String MIN_ID = "android_app_eksamen";
-
-    //Logging
-    private static final String TAG = "MainActivity";
 
     //Database aksess
     private DatabaseAccess dbAksess;
@@ -87,11 +82,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         //
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        //
+        //Utfører metodekall som sjekker om bruker har godkjent bruk av GPS koordinater
         gpsDetaljer();
 
         //
-        restAdapter = new RestAdapter(this);
         requestQueue = Volley.newRequestQueue(this);
 
         //
@@ -103,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         dbAksess.open();
         boolean tilstand = Boolean.parseBoolean(dbAksess.getBryterTilstand());
         String arstall = dbAksess.getArstall();
-        Log.d(TAG, "onCreate: " + tilstand + " " + arstall);
         dbAksess.close();
 
-        //
-        postnrFraKartData(radius, 60.39299, 5.32415);
+        //Sender med radius, lengde og breddegrad
+        //for og kunne bruke det til og få postNr fra Kartverkets API
+        postnrFraKartData(radius, lat, lon);
         fyllRecyclerView(spørring, tilstand, arstall, "");
 
         //
@@ -123,12 +117,29 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     }/**SLUTT PÅ OnCreate*/
 
+    /**
+     * Metode for og søke etter spisesteder
+     * basert på det den henter fra søkebar
+     *
+     * @param view*/
     public void søke_knapp(View view) {
         spisestedArrayList.clear();
         spørring = String.valueOf(søkeBar.getText());
         fyllRecyclerView(spørring, false, "", "");
     }
 
+    /**
+     * Metode for og fylle recyclerview.
+     * Filtrering blir også lagt til om bruker har det på
+     * Baser på 3 "kriterier".
+     * Kriterie 1: Standard lasting ved onCreate/Oppstart
+     * Kriterie 2: Spørring i form av tekst fra søkebar
+     * Kriterie 3: postNr uthentet fra gps lokasjon
+     *
+     * @param spørring
+     * @param tilstand
+     * @param arstall
+     * @param postnr*/
     private void fyllRecyclerView(String spørring, boolean tilstand, String arstall, String postnr) {
         String url          = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?query=" + spørring;
         String urlOnCreate  = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/tilsyn?sakref=" + arstall;
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             });
 
             MySingleton.getInstance(this).addToRequestQueue(requestArstall);
-            Log.d(TAG, "fyllRecyclerView: " + "POSTNR IF");
+
         }else if (tilstand && !arstall.equals("Alle")) {
             StringRequest requestArstall =  new StringRequest(Request.Method.GET, urlOnCreate, new Response.Listener<String>() {
                 @Override
@@ -183,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             });
 
             MySingleton.getInstance(this).addToRequestQueue(requestArstall);
-            Log.d(TAG, "fyllRecyclerView: " + "TILSTAND IF");
+
         }else {
             StringRequest request =  new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
@@ -208,11 +219,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             });
 
             MySingleton.getInstance(this).addToRequestQueue(request);
-            Log.d(TAG, "fyllRecyclerView: " + "ELSE");
+
         }
     }
 
-    private int postnrFraKartData(int radius, double lat, double lon) {
+    /**
+     * Metode for og hente data fra parset JSON
+     *
+     * @param radius
+     * @param lat
+     * @param lon*/
+    private void postnrFraKartData(int radius, double lat, double lon) {
 
         String kartDataUrl = "https://ws.geonorge.no/adresser/v1/punktsok?radius=" + radius + "&lat=" + lat +"&lon=" + lon;
 
@@ -235,10 +252,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 error.printStackTrace();
             }
         });
-
         MySingleton.getInstance(this).addToRequestQueue(request);
-
-        return 0;
     }
 
     @Override
@@ -260,6 +274,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             startActivity(startIntent);
             return true;
         }else if (id == R.id.action_location) {
+            //Populerer recyclerviewet basert på postNr fra brukers koordinater.
+            //3801 Bø gir ingen resultater.
             spisestedArrayList.clear();
             String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
             fyllRecyclerView("", false, "", postnr);
@@ -268,6 +284,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Metode for og sende spisested objekt til ListViewActivity.
+     * Posisjon blir brukt for og vite hvilket objekt som skal sendes
+     *
+     * @param posisjon */
     @Override
     public void onNoteClick(int posisjon) {
         Intent intent = new Intent(this, ListViewActivity.class);
@@ -282,6 +303,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         startActivity(intent);
     }
 
+    /**
+     * Metode for og be bruker om tillatelse til og bruke
+     * enhetens gps koordinater.
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == MY_REQUEST_LOCATION) {
             //hvis bruker avviser tillatelsen vil arrayet være tomt
@@ -293,6 +321,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
     }
 
+    /**
+     * Metode for sjekk om bruker har godkjent bruk av gps.
+     * Tar i bruk godkjennelsen for og hente lengde og breddegrad*/
     public void gpsDetaljer() {
         if (!locationManager.isProviderEnabled(locationProvider)) {
             Toast.makeText(this, "Aktiver " + locationProvider + " under Location i settings", Toast.LENGTH_SHORT).show();
@@ -306,7 +337,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 myLocation = locationManager.getLastKnownLocation(locationProvider);
                 lat = myLocation.getLatitude();
                 lon = myLocation.getLongitude();
-                Log.d(TAG, "onCreate: " + lat + "  " + lon);
             }
         }
     }

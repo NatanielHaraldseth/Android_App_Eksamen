@@ -10,8 +10,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-/*Denne koden er hentet fra:
-* https://developer.android.com/training/volley/requestqueue*/
+/**
+ * Denne koden er hentet fra:
+ * https://developer.android.com/training/volley/requestqueue
+ * */
 public class MySingleton {
 
     private static MySingleton instance;

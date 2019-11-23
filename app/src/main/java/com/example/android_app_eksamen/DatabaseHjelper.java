@@ -19,11 +19,21 @@ class DatabaseHjelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAVN, null, 1);
     }
 
+    /**
+     * Metode for og opprette lokal Sqlite DB
+     **/
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_NAME + "(favoritt_sted_id integer PRIMARY KEY AUTOINCREMENT, post_sted text,post_nr integer,årstall text, toggle_state text)");
     }
 
+    /**
+     * Metode for og oppgradere lokal Sqlite DB.
+     * Brukes i samarbeid med funksjon i DatabaseAccess
+     *
+     * @param db
+     * @param gammelVersjon
+     * @param nyVersjon*/
     @Override
     public void onUpgrade(SQLiteDatabase db, int gammelVersjon, int nyVersjon) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);

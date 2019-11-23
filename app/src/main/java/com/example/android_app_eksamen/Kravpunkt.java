@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Kravpunkt implements Serializable {
 
@@ -26,18 +25,11 @@ public class Kravpunkt implements Serializable {
     //Tabell navn
     private static final String TABLE_NAME              = "entries";
 
-    //Hmmmmm, kan funke
-    private Date date;
-
-    public Kravpunkt(int karakter, String dato, String tilsynid, String tekst_no, String kravpunktnavn_no, double ordningsverdi) {
-        this.dato               = dato;
-        this.tilsynid           = tilsynid;
-        this.tekst_no           = tekst_no;
-        this.karakter           = karakter;
-        this.ordningsverdi      = ordningsverdi;
-        this.kravpunktnavn_no   = kravpunktnavn_no;
-    }
-
+    /**
+     * Konstruktør metode for innhenting av JSONObjekter
+     * Sender riktig json data til riktig klasse variabel
+     *
+     * @param jsonKP*/
     public Kravpunkt(JSONObject jsonKP) {
         this.dato               = jsonKP.optString(KOL_DATO);
         this.tilsynid           = jsonKP.optString(KOL_TILSYN_ID);
@@ -47,6 +39,15 @@ public class Kravpunkt implements Serializable {
         this.kravpunktnavn_no   = jsonKP.optString(KOL_KRAV_PUNKT_NAVN_NO);
     }
 
+    /**
+     * Metode for parsing av JSON data
+     *
+     * @param jsonKravpunkt
+     *
+     * @throws JSONException
+     * @throws NullPointerException
+     *
+     * @return kravpunktList*/
     public static ArrayList<Kravpunkt> leggTilKravpunktListe(String jsonKravpunkt) throws JSONException, NullPointerException{
         ArrayList<Kravpunkt> kravpunktList= new ArrayList<>();
 
@@ -64,26 +65,42 @@ public class Kravpunkt implements Serializable {
 
     }
 
+    /**
+     * Get metode for og hente karakter
+     *
+     * @return karakter*/
     public int getKarakter() {
         return karakter;
     }
 
+    /**
+     * Get metode for og hente ordningsverdi
+     *
+     * @return ordningsverdi*/
     public double getOrdningsverdi() {
         return ordningsverdi;
     }
 
+    /**
+     * Get metode for og hente dato
+     *
+     * @return dato*/
     public String getDato() {
         return dato;
     }
 
-    public String getTilsynid() {
-        return tilsynid;
-    }
-
+    /**
+     * Get metode for og hente teskst_no
+     *
+     * @return teskst_no*/
     public String getTekst_no() {
         return tekst_no;
     }
 
+    /**
+     * Get metode for og hente kravpunktnavn_no
+     *
+     * @return kravpunktnavn_no*/
     public String getKravpunktnavn_no() {
         return kravpunktnavn_no;
     }

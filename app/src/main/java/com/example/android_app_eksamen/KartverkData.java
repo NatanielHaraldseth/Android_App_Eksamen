@@ -17,14 +17,24 @@ public class KartverkData {
     //JSON tabell
     private static final String TABLE_NAME  = "adresser";
 
-    public KartverkData(int postnr) {
-        this.postnr = postnr;
-    }
-
+    /**
+     * Konstruktør metode for innhenting av JSONObjekter
+     * Sender riktig json data til riktig klasse variabel
+     *
+     * @param jsonKart*/
     public KartverkData(JSONObject jsonKart) {
         this.postnr = jsonKart.optInt(KOL_POST_NR);
     }
 
+    /**
+     * Metode for parsing av JSON data
+     *
+     * @param jsonKart
+     *
+     * @throws JSONException
+     * @throws NullPointerException
+     *
+     * @return kartverkList*/
     public static ArrayList<KartverkData> getKartPostnr(String jsonKart) throws JSONException, NullPointerException{
         ArrayList<KartverkData> kartverkList = new ArrayList<>();
 
@@ -40,6 +50,10 @@ public class KartverkData {
         return kartverkList;
     }
 
+    /**
+     * Get metode for og hente postNr
+     *
+     * @return postnr*/
     public int getPostnr() {
         return postnr;
     }

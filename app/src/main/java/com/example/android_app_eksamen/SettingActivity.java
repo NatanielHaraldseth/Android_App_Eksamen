@@ -2,7 +2,6 @@ package com.example.android_app_eksamen;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -19,14 +18,12 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
     private TextView favoritt_sted_input_postnr, favoritt_sted_input_poststed;
     private Spinner arstall_spinner;
     private Switch bryter;
-
+    //
     private ArrayAdapter<String> adapter;
-
+    //
     private String arstall;
-
+    //
     private DatabaseAccess aksess;
-
-    private static final String TAG = "SettingActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +59,14 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
         arstall_spinner.setAdapter(adapter);
     }
 
+    /**
+     * Metode for og få tak i posisjon til et spesifikt år.
+     * Eksempelvis: 2015 = [0]
+     *
+     * @param arstall
+     * @param arstallArray
+     *
+     * @return i*/
     public int getArstallIndex(String arstall, String[] arstallArray) {
 
         for (int i = 0; i < arstallArray.length; i++) {
@@ -71,6 +76,11 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
         return 0;
     }
 
+    /**
+     * Metode for og se etter om bryter knappen endrer tilstand.
+     *
+     * @param buttonView
+     * @param isChecked */
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         aksess.open();
         Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
@@ -78,8 +88,6 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
             String lokalArstall = arstall_spinner.getSelectedItem().toString();
             if (!lokalArstall.isEmpty()) {
                 aksess.settInnArstall(lokalArstall);
-                Log.d(TAG, "onCheckedChanged: " + lokalArstall);
-
             }
         }
 
@@ -91,21 +99,37 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
         editor.apply();
     }
 
+    /**
+     * Metode for og lagre "favorittsted" basert på poststed
+     *
+     * @param view */
     public void favorittsted_lagring_poststed(View view) {
         String poststed = String.valueOf(favoritt_sted_input_poststed.getText());
-        aksess.open();
-        aksess.settInnPoststed(poststed);
-        favoritt_sted_input_poststed.setText("");
-        aksess.close();
-        Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
+        if (!poststed.isEmpty()) {
+            aksess.open();
+            aksess.settInnPoststed(poststed);
+            favoritt_sted_input_poststed.setText("");
+            aksess.close();
+            Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "TOMT FELT, VENLIGST FYLL INN", Toast.LENGTH_LONG).show();
+        }
     }
 
+    /**
+     * Metode for og lagre "favorittsted" basert på postNr
+     *
+     * @param view */
     public void favorittsted_lagring_postnr(View view) {
         String postnr = String.valueOf(favoritt_sted_input_postnr.getText());
-        aksess.open();
-        aksess.settInnPostnr(postnr);
-        favoritt_sted_input_postnr.setText("");
-        aksess.close();
-        Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
+        if (!postnr.isEmpty()) {
+            aksess.open();
+            aksess.settInnPostnr(postnr);
+            favoritt_sted_input_postnr.setText("");
+            aksess.close();
+            Toast.makeText(this, "SATT INN SUKSESSFULLT", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "TOMT FELT, VENLIGST FYLL INN", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -2,8 +2,6 @@ package com.example.android_app_eksamen;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,9 +22,6 @@ public class ListViewActivity extends AppCompatActivity {
     private ArrayList<Kravpunkt> kravpunktArrayList;
     private ListViewAdapter listViewAdapter;
 
-    //Logging
-    private static final String TAG = "ListViewActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +32,11 @@ public class ListViewActivity extends AppCompatActivity {
         TextView navnTV     = findViewById(R.id.textViewNavn);
         TextView adresseTV  = findViewById(R.id.textViewAdresse);
         TextView poststedTV = findViewById(R.id.textViewPoststed);
-        //
+
+        //Tar imot Spisested objekt sendt fra MainActivity
         Intent intent = getIntent();
         Spisested spisested = (Spisested) intent.getSerializableExtra(MainActivity.MIN_ID);
         String tilsynId = spisested.getTilsynid();
-        Log.d(TAG, "onCreate: " + tilsynId);
         //
         navnTV.setText(spisested.getNavn());
         adresseTV.setText(spisested.getAdrlinje1());
@@ -55,6 +50,12 @@ public class ListViewActivity extends AppCompatActivity {
         list.setAdapter(listViewAdapter);
     }
 
+    /**
+     * Metode for og fylle listview med data basert på tilsynId
+     *
+     * @param tilsynId
+     *
+     * */
     private void fyllListViewKravpunkt(String tilsynId) {
         String url = "https://hotell.difi.no/api/json/mattilsynet/smilefjes/kravpunkter?tilsynid=" + tilsynId;
 

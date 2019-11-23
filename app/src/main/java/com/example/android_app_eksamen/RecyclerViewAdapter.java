@@ -1,7 +1,5 @@
 package com.example.android_app_eksamen;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +16,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private OnNoteListener mOnNoteListener;
 
     public class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //
-        private static final String TAG = "WordViewHolder";
 
         //
         private TextView text_view_navn, text_view_post_sted, text_view_total_karakter, text_view_adresse, text_view_post_nr, text_view_org_nr;
         private ImageView image_view_total_karakter;
         private OnNoteListener onNoteListener;
 
+        /**
+         * Klasse for a fremvise objekter i et recyclerView
+         *
+         * @param itemView
+         * @param onNoteListener */
         public WordViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             //
@@ -43,19 +44,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View view) {
-            //view.getContext().startActivity(new Intent(view.getContext(), ListViewActivity.class));
             onNoteListener.onNoteClick(getAdapterPosition());
-            int pos = getAdapterPosition();
-            Log.d(TAG, "onClick: " + spisestedArrayList.get(pos).getTilsynid());
         }
 
     }/**SLUTT PÅ WordViewHolder KLASSE*/
 
+    /**
+     * Konstruktør metode for RecyclerViewAdapter
+     * Brukes for og få tilgang til lytter og datasett
+     *
+     * @param spisestedArrayList
+     * @param mOnNoteListener
+     * */
     public RecyclerViewAdapter(ArrayList<Spisested> spisestedArrayList, OnNoteListener mOnNoteListener) {
         this.spisestedArrayList = spisestedArrayList;
         this.mOnNoteListener = mOnNoteListener;
     }
 
+    /**
+     * Metode for og "blåse opp" layout for bruk
+     * layout vil bli "blåst opp" på foreldre
+     *
+     * @param parent
+     * @param viewType
+     *
+     * @return wvh*/
     @Override
     public RecyclerViewAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //
@@ -64,6 +77,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return wvh;
     }
 
+    /**
+     * Metode for og sette verdier inn i dets respektive layout objekter.
+     * Bruker posisjon for og kunne finne "unike" objekter i et datasett
+     *
+     * @param holder
+     * @param position */
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.WordViewHolder holder, int position) {
         Spisested spisested = spisestedArrayList.get(position);
@@ -84,17 +103,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
+    /**
+     * Metode for og få tak i antall elementer i et spesifikt datasett
+     *
+     * @return spisestedArrayList.size()*/
     @Override
     public int getItemCount() {
         return spisestedArrayList.size();
     }
 
+    /**
+     * Metode for og slette spesifikt element i datasettet.
+     * Bruker posisjon for og finne elementet
+     *
+     * @param posisjon */
     public void deleteItem(int posisjon) {
         spisestedArrayList.remove(posisjon);
-    }
-
-    public Spisested getItem(int posisjon) {
-        return spisestedArrayList.get(posisjon);
     }
 
     public interface OnNoteListener {

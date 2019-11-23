@@ -24,6 +24,17 @@ public class Spisested implements Serializable {
     //Json tabell
     private static final String TABLE_NAME          = "entries";
 
+    /**
+     * Konstruktør metode for og kunne opprette et spisested objekt direkte
+     * Til bruk for oppretting etter json parsing
+     *
+     * @param adrlinje1
+     * @param navn
+     * @param orgnummer
+     * @param postnr
+     * @param poststed
+     * @param tilsynid
+     * @param total_karakter */
     public Spisested(int orgnummer, int postnr, int total_karakter, String navn, String adrlinje1, String poststed, String tilsynid) {
         this.orgnummer          = orgnummer;
         this.postnr             = postnr;
@@ -34,6 +45,11 @@ public class Spisested implements Serializable {
         this.tilsynid           = tilsynid;
     }
 
+    /**
+     * Konstruktør metode for innhenting av JSONObjekter
+     * Sender riktig json data til riktig klasse variabel
+     *
+     * @param jsonST*/
     //jsonST = jsonSpiseSted.
     public Spisested(JSONObject jsonST) {
         this.orgnummer          = jsonST.optInt(KOL_ORG_NUMMER);
@@ -45,8 +61,15 @@ public class Spisested implements Serializable {
         this.tilsynid           = jsonST.optString(KOL_TILSYN_ID);
     }
 
-    public Spisested() {}
-
+    /**
+     * Metode for parsing av JSON data
+     *
+     * @param jsonSpisested
+     *
+     * @throws JSONException
+     * @throws NullPointerException
+     *
+     * @return spisestedList*/
     public static ArrayList<Spisested> leggTilSpisestedListe(String jsonSpisested) throws JSONException, NullPointerException{
         ArrayList<Spisested> spisestedList = new ArrayList<>();
 
