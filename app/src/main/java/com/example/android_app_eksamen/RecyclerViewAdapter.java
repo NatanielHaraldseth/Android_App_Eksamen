@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.WordViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.SpisestedViewHolder> {
 
     private ArrayList<Spisested> spisestedArrayList;
     private OnNoteListener mOnNoteListener;
 
-    public class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SpisestedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //
         private TextView text_view_navn, text_view_post_sted, text_view_total_karakter, text_view_adresse, text_view_post_nr, text_view_org_nr;
@@ -27,7 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          *
          * @param itemView
          * @param onNoteListener */
-        public WordViewHolder(View itemView, OnNoteListener onNoteListener) {
+        public SpisestedViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             //
             text_view_navn              = itemView.findViewById(R.id.text_view_navn);
@@ -47,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             onNoteListener.onNoteClick(getAdapterPosition());
         }
 
-    }/**SLUTT PÅ WordViewHolder KLASSE*/
+    }/**SLUTT PÅ SpisestedViewHolder KLASSE*/
 
     /**
      * Konstruktør metode for RecyclerViewAdapter
@@ -70,10 +70,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      *
      * @return wvh*/
     @Override
-    public RecyclerViewAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SpisestedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_v2, parent, false);
-        WordViewHolder wvh = new WordViewHolder(view, mOnNoteListener);
+        SpisestedViewHolder wvh = new SpisestedViewHolder(view, mOnNoteListener);
         return wvh;
     }
 
@@ -84,7 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * @param holder
      * @param position */
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.WordViewHolder holder, int position) {
+    public void onBindViewHolder(SpisestedViewHolder holder, int position) {
         Spisested spisested = spisestedArrayList.get(position);
         //
         holder.text_view_navn.setText(spisested.getNavn());
