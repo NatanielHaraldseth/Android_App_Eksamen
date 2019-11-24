@@ -277,8 +277,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }else if (id == R.id.action_location) {
             //Populerer recyclerviewet basert på postNr fra brukers koordinater.
             //3801 Bø gir ingen resultater.
-            if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                spisestedArrayList.clear();
+            spisestedArrayList.clear();
+            if(kartverkDataArrayList!= null && kartverkDataArrayList.size() !=0) {
                 String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
                 fyllRecyclerView("", false, "", postnr);
             }else {
