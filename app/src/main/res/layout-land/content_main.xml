@@ -21,13 +21,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
         android:onClick="søke_knapp"
         android:text="SØK"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spise_sted_søkebar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
