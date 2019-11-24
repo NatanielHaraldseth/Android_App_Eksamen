@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         //Sender med radius, lengde og breddegrad
         //for og kunne bruke det til og få postNr fra Kartverkets API
+        //Lat = 59.912805, Lon = 10.747933. Koordinater for Oslo får testing
         postnrFraKartData(radius, lat, lon);
         fyllRecyclerView(spørring, tilstand, arstall, "");
 
@@ -277,12 +278,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }else if (id == R.id.action_location) {
             //Populerer recyclerviewet basert på postNr fra brukers koordinater.
             //3801 Bø gir ingen resultater.
-            spisestedArrayList.clear();
             if(kartverkDataArrayList!= null && kartverkDataArrayList.size() !=0) {
+                spisestedArrayList.clear();
                 String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
                 fyllRecyclerView("", false, "", postnr);
             }else {
-                Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Tillatelse ikke gitt", Toast.LENGTH_SHORT).show();
             }
         }
 
