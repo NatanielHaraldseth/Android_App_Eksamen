@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     //GPS lokasjon
     private final static int MY_REQUEST_LOCATION = 1;
     private final static int radius = 300;
+    private int permissionCheck;
     private double lat;
     private double lon;
     private LocationManager locationManager;
@@ -276,9 +277,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }else if (id == R.id.action_location) {
             //Populerer recyclerviewet basert på postNr fra brukers koordinater.
             //3801 Bø gir ingen resultater.
-            spisestedArrayList.clear();
-            String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
-            fyllRecyclerView("", false, "", postnr);
+            if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                spisestedArrayList.clear();
+                String postnr = String.valueOf(kartverkDataArrayList.get(0).getPostnr());
+                fyllRecyclerView("", false, "", postnr);
+            }else {
+                Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
